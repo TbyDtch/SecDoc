@@ -70,4 +70,14 @@ function secdoc.clean(color)
     term.setCursorPos(1,1)
 end
 
+--- ERROR Codes
+function secdoc.errorScreen(header, errortxt, time)
+    term.setBackgroundColor(colors.blue)
+    secdoc.clean(false)
+    secdoc.header(header)
+    secdoc.centerText("AN ERROR HAS OCCURED: " .. errortxt)
+    secdoc.centerText("REBOOTING IN " .. time .. " SECONDS")
+    sleep(time)
+end
+
 return secdoc -- Crucial: You must return the table at the end

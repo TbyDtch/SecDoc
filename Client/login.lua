@@ -24,30 +24,33 @@ while true do
         local password = read("*")
 
         -- Send password
-        rednet.send(10, password, PROTOCOL_LOGIN)
-        local senderID, packet = rednet.receive(PROTOCOL_LOGIN)
-        if senderID == 10 and packet.message == "VALID" then
-            sd.clean(true)
-            sd.header("VALID PASSWORD")
-            sd.centerText("Welcome, " .. packet.info)
-            sleep(5)
-            sd.clean(true)
-            break
+        if rednet.isOpen() then
+            rednet.send(10, password, PROTOCOL_LOGIN)
+            local senderID, packet = rednet.receive(PROTOCOL_LOGIN)
+            if not senderID then -- disable later
+                print("failed...")
+            end
+            if senderID == 10 and packet.message == "VALID" then
+                sd.clean(true)
+                sd.header("VALID PASSWORD")
+                sd.centerText("Welcome, " .. packet.info)
+                sleep(5)
+                sd.clean(true)
+                break
+            else
+                term.setBackgroundColor(colors.blue)
+                sd.clean(false)
+                sd.header("ERROR")
+                sd.centerText("SERVER: " .. packet.info)
+                sleep(5)
+                sd.clean(true)
+            end
         else
-            term.setBackgroundColor(colors.blue)
-            sd.clean(false)
-            sd.header("ERROR")
-            sd.centerText("SERVER: " .. packet.info)
-            sleep(5)
-            sd.clean(true)
+            sd.errorScreen("SecDoc Login Service","NO MODEM FOUND", 10)
         end
 
     else -- Failed to find modem and reboot
-        term.setBackgroundColor(colors.blue)
-        sd.header("SecDoc Login Service")
-        sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
-        sd.centerText("REBOOTING IN 10 SECONDS")
-        sleep(10)
+        sd.errorScreen("SecDoc Login Service", "NO MODEM FOUND", 10)
     end
 end
 

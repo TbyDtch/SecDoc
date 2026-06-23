@@ -20,11 +20,6 @@ while true do
         rednet.send(senderID, packet, PROTOCOL_DOCS)
         sd.clean(true)
     else
-        term.setBackgroundColor(colors.blue)
-        sd.clean(false)
-        sd.header("SecDoc Documentation Server")
-        sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
-        sd.centerText("REBOOTING IN 10 SECONDS")
-        sleep(10)
+        sd.errorScreen("SecDoc Documentation Server", "NO MODEM FOUND", 10)
     end
 end
