@@ -45,7 +45,7 @@ function secdoc.spam(text)
     for i = 1, width do
         write(text)
     end
-
+    print()
     print()
 end
 
