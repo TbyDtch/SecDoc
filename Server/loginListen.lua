@@ -17,23 +17,20 @@ while true do
         print("Login Count:",loginCount)
         print("Valid Count:",validCount)
         local senderID, message = rednet.receive(PROTOCOL_LOGIN)
-        if senderID then
-            loginCount = loginCount + 1
-            if message == "fart" then
-                local packet = {
-                message = "VALID",
-                info = "Dr. Bubba"
-                }
-                rednet.send(senderID, packet, PROTOCOL_LOGIN)
-                validCount = validCount + 1
-            else
-                local packet = {
-                    message = "INVALID",
-                    info = "INVALID LOGIN"
-                }
-                rednet.send(senderID, packet, PROTOCOL_LOGIN)
-                loginCount = loginCount + 1
-            end
+        loginCount = loginCount + 1
+        if message == "fart" then
+            local packet = {
+            message = "VALID",
+            info = "Dr. Bubba"
+            }
+            rednet.send(senderID, packet, PROTOCOL_LOGIN)
+            validCount = validCount + 1
+        else
+            local packet = {
+                message = "INVALID",
+                info = "INVALID LOGIN"
+            }
+            rednet.send(senderID, packet, PROTOCOL_LOGIN)
         end
     else
         sd.errorScreen("SecDoc Login Server", "NO MODEM FOUND", 10)
