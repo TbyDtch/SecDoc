@@ -7,7 +7,7 @@ local docpage = 0
 
 -- UI setup
 function UI(name)
-    sd.clear()
+    sd.clean()
     sd.header("SecDoc Browser Interface: " .. name)
 end
 

@@ -14,13 +14,14 @@ while true do
         hits = hits + 1
         local senderID, docpage = rednet.receive(PROTOCOL_DOCS)
         local packet = {
-            name = "Dr. Bubba"
+            name = "Dr. Bubba",
+            index = {}
         }
         rednet.send(senderID, packet, PROTOCOL_DOCS)
         sd.clean()
     else
-        sd.clean()
         term.setBackgroundColor(colors.blue)
+        sd.clean()
         sd.header("SecDoc Documentation Server")
         sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
         sd.centerText("REBOOTING IN 10 SECONDS")
