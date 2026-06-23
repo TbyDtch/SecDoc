@@ -18,7 +18,7 @@ while true do
         sd.centerText("Login Count:".. loginCount)
         sd.centerText("Valid Count:".. validCount)
         -- waiting for login packets
-        local senderID, password = rednet.receive(sd.sd.PROTOCOL_LOGIN)
+        local senderID, password = rednet.receive(sd.PROTOCOL_LOGIN)
         loginCount = loginCount + 1
         local passID = sd.findStringInList(sdd.passwords, password)
         if passID then -- Safely checks that passID isn't nil
@@ -33,14 +33,14 @@ while true do
                 message = "VALID",
                 info = sdd.names[passID]
             }
-            rednet.send(senderID, clientPacket, sd.sd.PROTOCOL_LOGIN) -- send to client
+            rednet.send(senderID, clientPacket, sd.PROTOCOL_LOGIN) -- send to client
             validCount = validCount + 1
         else
             local failPacket = {
                 message = "INVALID",
                 info = "INVALID LOGIN"
             }
-            rednet.send(senderID, failPacket, sd.sd.PROTOCOL_LOGIN)
+            rednet.send(senderID, failPacket, sd.PROTOCOL_LOGIN)
         end
     else
         sd.errorScreen("SecDoc Login Server", "NO MODEM FOUND", 10)
