@@ -1,8 +1,8 @@
 -- Config / Setup
 local sd = require("SecDocLib")
-local loginCount
-local pingCount
-local validCount
+local loginCount = 0
+local pingCount = 0
+local validCount = 0
 local PROTOCOL_LOGIN = "SecDocLoginPacket"
 
 -- Start
@@ -12,7 +12,6 @@ while true do
 
     if rednet.isOpen() then
         sd.header("SecDoc Login Server")
-        print()
         print("Listening for pings and logins...")
         print("Ping Count:",pingCount)
         print("Login Count:",loginCount)
@@ -26,7 +25,6 @@ while true do
     else
         term.setBackgroundColor(colors.blue)
         sd.header("SecDoc Login Server")
-        print()
         sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
         sd.centerText("REBOOTING IN 10 SECONDS")
         sleep(10)

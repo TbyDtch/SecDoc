@@ -58,7 +58,6 @@ end
 function secdoc.header(title)
     secdoc.centerText(title)
     secdoc.spam("=")
-    print()
 end
 
 --- Cleans console in one line

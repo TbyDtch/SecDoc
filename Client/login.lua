@@ -10,7 +10,6 @@ function UI()
     sd.centerText("Enter Password:")
     term.setBackgroundColor(colors.cyan)
     sd.spam(" ")
-    term.setCursorPos(1,1)
 end
 
 -- Program start
@@ -21,12 +20,13 @@ while true do
         -- Text slop & read password
         sd.header("SecDoc Login Service")
         UI()
+        term.setCursorPos(1,5)
         local password = read("*")
 
         -- Send password
         rednet.send(10, password, PROTOCOL_LOGIN)
         local senderID, message, protocol = rednet.receive(PROTOCOL_LOGIN)
-        if senderID == 10 & message == "VALID" then
+        if senderID == 10 and message == "VALID" then
             sd.centerText("VALID PASSWORD")
             sleep(5)
             break
