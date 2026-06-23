@@ -78,7 +78,7 @@ function secdoc.errorScreen(header, errortxt, time)
     secdoc.centerText("AN ERROR HAS OCCURED: " .. errortxt)
     secdoc.centerText("REBOOTING IN " .. time .. " SECONDS")
     sleep(time)
-    secdoc.clean()
+    secdoc.clean(true)
 end
 
 return secdoc -- Crucial: You must return the table at the end
