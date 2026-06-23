@@ -3,7 +3,6 @@ local sd = require("SecDocLib")
 sd.terminateBlock(true)
 sd.clean(true)
 local PROTOCOL_DOCS = "SecDocsPacket"
-local docpage = 0
 
 -- UI setup
 function UI(name)
@@ -15,10 +14,10 @@ end
 while true do
     peripheral.find("modem", rednet.open)
     if rednet.isOpen() then
-        rednet.send(13, docpage, PROTOCOL_DOCS)
-        local senderID, packet = rednet.receive(PROTOCOL_DOCS)
+        rednet.send(13, PROTOCOL_DOCS)
+        local senderID, userinfo = rednet.receive(PROTOCOL_DOCS)
         if senderID == 13 then
-            UI(packet.name)
+            UI(userinfo)
             sleep(5)
             break
         end

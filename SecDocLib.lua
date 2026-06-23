@@ -81,4 +81,13 @@ function secdoc.errorScreen(header, errortxt, time)
     secdoc.clean(true)
 end
 
+function secdoc.findStringInList(targetList, searchString)
+    for index, value in ipairs(targetList) do
+        if value == searchString then
+            return index -- Found it! Return the position
+        end
+    end
+    return nil -- Return nil if the string isn't in the list
+end
+
 return secdoc -- Crucial: You must return the table at the end
