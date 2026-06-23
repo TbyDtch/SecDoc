@@ -16,7 +16,7 @@ while true do
         print("Ping Count:",pingCount)
         print("Login Count:",loginCount)
         print("Valid Count:",validCount)
-        local senderID, message, protocol = rednet.receive(PROTOCOL_LOGIN)
+        local senderID, message = rednet.receive(PROTOCOL_LOGIN)
         loginCount = loginCount + 1
         if message == "fart" then
             local packet = {
@@ -34,6 +34,7 @@ while true do
             loginCount = loginCount + 1
         end
     else
+        sd.clean()
         term.setBackgroundColor(colors.blue)
         sd.header("SecDoc Login Server")
         sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
