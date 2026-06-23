@@ -25,9 +25,11 @@ while true do
 
         -- Send password
         rednet.send(10, password, PROTOCOL_LOGIN)
-        local senderID, message, protocol = rednet.receive(PROTOCOL_LOGIN)
-        if senderID == 10 and message == "VALID" then
+        local senderID, packet, protocol = rednet.receive(PROTOCOL_LOGIN)
+        if senderID == 10 and packet.message == "VALID" then
+            sd.clean()
             sd.centerText("VALID PASSWORD")
+            sd.centerText("\n\n\nWelcome, " .. packet.name)
             sleep(5)
             break
         end

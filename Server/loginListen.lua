@@ -19,7 +19,11 @@ while true do
         local senderID, message, protocol = rednet.receive(PROTOCOL_LOGIN)
         loginCount = loginCount + 1
         if message == "fart" then
-            rednet.send(senderID, "VALID", PROTOCOL_LOGIN)
+            local packet = {
+            message = "VALID",
+            name = "Dr. Nigger"
+            }
+            rednet.send(senderID, packet, PROTOCOL_LOGIN)
             validCount = validCount + 1
         end
     else
