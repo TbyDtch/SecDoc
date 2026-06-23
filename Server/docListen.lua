@@ -1,6 +1,6 @@
 -- Config / Setup
 local sd = require("SecDocLib")
-local PROTOCOL_DOCS = "SecDocLoginPacket"
+local PROTOCOL_DOCS = "SecDocsPacket"
 
 -- Start
 while true do

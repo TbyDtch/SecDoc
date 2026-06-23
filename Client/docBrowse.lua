@@ -2,7 +2,7 @@
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
 sd.clean()
-local PROTOCOL_DOCS = "SecDocLoginPacket"
+local PROTOCOL_DOCS = "SecDocsPacket"
 local docpage = 0
 
 -- UI setup
