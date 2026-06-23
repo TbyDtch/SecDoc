@@ -27,9 +27,6 @@ while true do
         if rednet.isOpen() then
             rednet.send(10, password, PROTOCOL_LOGIN)
             local senderID, packet = rednet.receive(PROTOCOL_LOGIN)
-            if not senderID then -- disable later
-                print("failed...")
-            end
             if senderID == 10 and packet.message == "VALID" then
                 sd.clean(true)
                 sd.header("VALID PASSWORD")

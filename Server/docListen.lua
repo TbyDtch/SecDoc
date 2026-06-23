@@ -13,12 +13,14 @@ while true do
         sd.centerText("Hits: " .. hits)
         hits = hits + 1
         local senderID, docpage = rednet.receive(PROTOCOL_DOCS)
-        local packet = {
-            name = "Dr. Bubba",
-            index = {}
-        }
-        rednet.send(senderID, packet, PROTOCOL_DOCS)
-        sd.clean(true)
+        if senderID then
+            local packet = {
+                name = "Dr. Bubba",
+                index = {}
+            }
+            rednet.send(senderID, packet, PROTOCOL_DOCS)
+            sd.clean(true)
+        end
     else
         sd.errorScreen("SecDoc Documentation Server", "NO MODEM FOUND", 10)
     end
