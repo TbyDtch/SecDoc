@@ -23,6 +23,10 @@ while true do
             break
         end
     else
-
+        term.setBackgroundColor(colors.blue)
+        sd.header("SecDoc Browser Interface: NULL")
+        sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
+        sd.centerText("REBOOTING IN 10 SECONDS")
+        sleep(10)
     end
 end
