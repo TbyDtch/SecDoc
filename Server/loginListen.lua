@@ -34,8 +34,8 @@ while true do
             loginCount = loginCount + 1
         end
     else
-        sd.clean()
         term.setBackgroundColor(colors.blue)
+        sd.clean()
         sd.header("SecDoc Login Server")
         sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
         sd.centerText("REBOOTING IN 10 SECONDS")
