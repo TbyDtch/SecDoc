@@ -62,7 +62,7 @@ end
 
 --- Cleans console in one line
 function secdoc.clean()
-    term.getBackgroundColor(colors.black)
+    term.setBackgroundColor(colors.black)
     term.clear()
     term.setCursorPos(1,1)
 end

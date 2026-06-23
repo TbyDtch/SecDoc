@@ -25,15 +25,23 @@ while true do
 
         -- Send password
         rednet.send(10, password, PROTOCOL_LOGIN)
-        local senderID, packet, protocol = rednet.receive(PROTOCOL_LOGIN)
+        local senderID, packet = rednet.receive(PROTOCOL_LOGIN)
         if senderID == 10 and packet.message == "VALID" then
             sd.clean()
             sd.centerText("VALID PASSWORD")
             print("\n\n\n")
-            sd.centerText("Welcome, " .. packet.name)
+            sd.centerText("Welcome, " .. packet.info)
             sleep(5)
             sd.clean()
             break
+        else
+            term.setBackgroundColor(colors.blue)
+            sd.clean()
+            sd.centerText("ERROR")
+            print("\n\n\n")
+            sd.centerText("SERVER: " .. packet.info)
+            sleep(5)
+            sd.clean()
         end
 
     else -- Failed to find modem and reboot
@@ -44,3 +52,5 @@ while true do
         sleep(10)
     end
 end
+
+term.shell(docBrowse.lua)

@@ -21,10 +21,17 @@ while true do
         if message == "fart" then
             local packet = {
             message = "VALID",
-            name = "Dr. Bubba"
+            info = "Dr. Bubba"
             }
             rednet.send(senderID, packet, PROTOCOL_LOGIN)
             validCount = validCount + 1
+        else
+            local packet = {
+                message = "INVALID",
+                info = "INVALID LOGIN"
+            }
+            rednet.send(senderID, packet, PROTOCOL_LOGIN)
+            loginCount = loginCount + 1
         end
     else
         term.setBackgroundColor(colors.blue)
