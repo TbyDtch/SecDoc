@@ -55,4 +55,17 @@ function secdoc.symbol(sym, text)
     print(sym, text)
 end
 
+function secdoc.header(title)
+    secdoc.centerText(title)
+    secdoc.spam("=")
+    print()
+end
+
+--- Cleans console in one line
+function secdoc.clean()
+    term.getBackgroundColor(colors.black)
+    term.clear()
+    term.setCursorPos(1,1)
+end
+
 return secdoc -- Crucial: You must return the table at the end
