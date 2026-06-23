@@ -1,11 +1,10 @@
 -- Config / Setup
 local sd = require("SecDocLib")
-local sdd = require("SecDocServerData")
--- Protocol for rednet
-local PROTOCOL_DOCS = "SecDocsPacket"
 -- Log interactions for debugging and visual pleasure
 local clientHits = 0
 local serverHits = 0
+-- Array for files server has
+local fileList = sd.getFilesFromDir("docs/")
 
 -- Start
 while true do
@@ -24,13 +23,13 @@ while true do
             serverHits = serverHits + 1
             -- Take data from password packet
             local pcID = loginPacket.pcID
-            local userID = loginPacket.userID
+            local user = loginPacket.user
 
             while true do
                 local senderID, message  = rednet.receive(PROTOCOL_DOCS)
-                if senderID == pcID & message == "REQUEST" then
+                if senderID == pcID and message == "REQUEST" then
                     clientHits = clientHits + 1
-                    rednet.send(senderID, sdd.names[userID])
+                    rednet.send(senderID, user, PROTOCOL_DOCS)
                     break
                 end
             end

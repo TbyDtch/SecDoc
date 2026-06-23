@@ -2,11 +2,9 @@
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
 sd.clean(true)
--- Add startup ping for background security and such
-local PROTOCOL_LOGIN = "SecDocLoginPacket"
 
 -- Easy UI Setup / Reset
-function UI()
+local function UI()
     sd.centerText("Enter Password:")
     term.setBackgroundColor(colors.cyan)
     sd.spam(" ")
@@ -25,8 +23,8 @@ while true do
 
         -- Send password
         if rednet.isOpen() then
-            rednet.send(10, password, PROTOCOL_LOGIN)
-            local senderID, packet = rednet.receive(PROTOCOL_LOGIN)
+            rednet.send(10, password, sd.PROTOCOL_LOGIN)
+            local senderID, packet = rednet.receive(sd.PROTOCOL_LOGIN)
             if senderID == 10 and packet.message == "VALID" then
                 sd.clean(true)
                 sd.header("VALID PASSWORD")

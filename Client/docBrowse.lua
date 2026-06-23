@@ -2,10 +2,11 @@
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
 sd.clean(true)
-local PROTOCOL_DOCS = "SecDocsPacket"
+-- array for docs
+local fileList
 
 -- UI setup
-function UI(name)
+local function UI(name)
     sd.clean(true)
     sd.header("SecDoc Browser Interface: " .. name)
 end
@@ -14,11 +15,16 @@ end
 while true do
     peripheral.find("modem", rednet.open)
     if rednet.isOpen() then
-        rednet.send(13, "REQUEST", PROTOCOL_DOCS)
-        local senderID, userinfo = rednet.receive(PROTOCOL_DOCS)
+        rednet.send(13, "REQUEST", sd.PROTOCOL_DOCS)
+        local senderID, user = rednet.receive(sd.PROTOCOL_DOCS)
         if senderID == 13 then
-            UI(userinfo)
-            sleep(5)
+            UI(user)
+            senderID, fileList = rednet.receive(sd.PROTOCOL_DOCS)
+            if senderID == 13 then
+                for index, fileName in ipairs(fileList) do
+                    sd.centerText(index .. ":" .. fileName)
+                end
+            end
             break
         end
     else

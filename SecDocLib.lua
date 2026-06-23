@@ -1,5 +1,9 @@
 local secdoc = {} -- Create the library table
 
+-- Protocols
+secdoc.PROTOCOL_LOGIN = "SecDocLoginPacket"
+secdoc.SecDocsPacket = "SecDocsPacket"
+
 -- Backup the original pullEvent function
 local nativePullEventRaw = os.pullEventRaw
 
@@ -88,6 +92,29 @@ function secdoc.findStringInList(targetList, searchString)
         end
     end
     return nil -- Return nil if the string isn't in the list
+end
+
+-- Reusable function to get all files in a directory
+function secdoc.getFilesFromDir(directoryPath)
+    local fileArray = {}
+    
+    -- Default to root if no path is provided
+    directoryPath = directoryPath or "" 
+
+    if fs.exists(directoryPath) and fs.isDir(directoryPath) then
+        local allItems = fs.list(directoryPath)
+        
+        for _, name in ipairs(allItems) do
+            local fullPath = fs.combine(directoryPath, name)
+            
+            -- Only save actual files, skipping sub-folders
+            if not fs.isDir(fullPath) then
+                table.insert(fileArray, name)
+            end
+        end
+    end
+    
+    return fileArray
 end
 
 return secdoc -- Crucial: You must return the table at the end
