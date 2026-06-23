@@ -23,7 +23,7 @@ while true do
         local senderID, password = rednet.receive(PROTOCOL_LOGIN)
         loginCount = loginCount + 1
         local passID = sd.findStringInList(sdd.passwords, password)
-        if passID > 0 then -- If password is valid hardcoded password
+        if passID then -- Safely checks that passID isn't nil
             -- Create packet for doc server
             local databasePacket = {
                 pcID = senderID,

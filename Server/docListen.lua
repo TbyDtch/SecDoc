@@ -27,10 +27,10 @@ while true do
             local userID = loginPacket.userID
 
             while true do
-                senderID  = rednet.receive(PROTOCOL_DOCS)
-                if senderID == pcID then
+                local senderID, message  = rednet.receive(PROTOCOL_DOCS)
+                if senderID == pcID & message == "REQUEST" then
                     clientHits = clientHits + 1
-                    rednet.send(senderID,sdd.names[userID])
+                    rednet.send(senderID, sdd.names[userID])
                     break
                 end
             end
