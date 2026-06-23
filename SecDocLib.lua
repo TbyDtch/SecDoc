@@ -61,8 +61,11 @@ function secdoc.header(title)
 end
 
 --- Cleans console in one line
-function secdoc.clean()
-    term.setBackgroundColor(colors.black)
+-- @param boolean color: clears color too
+function secdoc.clean(color)
+    if(color) then
+        term.setBackgroundColor(colors.black)
+    end
     term.clear()
     term.setCursorPos(1,1)
 end

@@ -7,7 +7,7 @@ local PROTOCOL_LOGIN = "SecDocLoginPacket"
 
 -- Start
 while true do
-    sd.clean()
+    sd.clean(true)
     peripheral.find("modem",rednet.open)
 
     if rednet.isOpen() then
@@ -35,7 +35,7 @@ while true do
         end
     else
         term.setBackgroundColor(colors.blue)
-        sd.clean()
+        sd.clean(false)
         sd.header("SecDoc Login Server")
         sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
         sd.centerText("REBOOTING IN 10 SECONDS")

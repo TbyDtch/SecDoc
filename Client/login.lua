@@ -1,7 +1,7 @@
 -- Config / Setup
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
-sd.clean()
+sd.clean(true)
 -- Add startup ping for background security and such
 local PROTOCOL_LOGIN = "SecDocLoginPacket"
 
@@ -27,21 +27,19 @@ while true do
         rednet.send(10, password, PROTOCOL_LOGIN)
         local senderID, packet = rednet.receive(PROTOCOL_LOGIN)
         if senderID == 10 and packet.message == "VALID" then
-            sd.clean()
-            sd.centerText("VALID PASSWORD")
-            print("\n\n\n")
+            sd.clean(true)
+            sd.header("VALID PASSWORD")
             sd.centerText("Welcome, " .. packet.info)
             sleep(5)
-            sd.clean()
+            sd.clean(true)
             break
         else
             term.setBackgroundColor(colors.blue)
-            sd.clean()
-            sd.centerText("ERROR")
-            print("\n\n\n")
+            sd.clean(false)
+            sd.header("ERROR")
             sd.centerText("SERVER: " .. packet.info)
             sleep(5)
-            sd.clean()
+            sd.clean(true)
         end
 
     else -- Failed to find modem and reboot

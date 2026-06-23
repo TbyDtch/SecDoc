@@ -1,13 +1,13 @@
 -- Config / Setup
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
-sd.clean()
+sd.clean(true)
 local PROTOCOL_DOCS = "SecDocsPacket"
 local docpage = 0
 
 -- UI setup
 function UI(name)
-    sd.clean()
+    sd.clean(true)
     sd.header("SecDoc Browser Interface: " .. name)
 end
 

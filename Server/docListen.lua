@@ -7,7 +7,7 @@ local hits = 0
 while true do
     peripheral.find("modem", rednet.open)
     if rednet.isOpen() then
-        sd.clean()
+        sd.clean(true)
         sd.header("SecDoc Documentation Server")
         sd.centerText("Listening for packets...")
         sd.centerText("Hits: " .. hits)
@@ -18,10 +18,10 @@ while true do
             index = {}
         }
         rednet.send(senderID, packet, PROTOCOL_DOCS)
-        sd.clean()
+        sd.clean(true)
     else
         term.setBackgroundColor(colors.blue)
-        sd.clean()
+        sd.clean(false)
         sd.header("SecDoc Documentation Server")
         sd.centerText("AN ERROR HAS OCCURED: NO MODEM FOUND")
         sd.centerText("REBOOTING IN 10 SECONDS")
