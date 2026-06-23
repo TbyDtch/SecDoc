@@ -53,4 +53,4 @@ while true do
     end
 end
 
-term.shell("docBrowse")
+shell.run("docBrowse.lua")

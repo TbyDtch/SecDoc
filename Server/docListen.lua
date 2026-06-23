@@ -16,10 +16,8 @@ while true do
         local packet = {
             name = "Dr. Bubba"
         }
-        rednet.send(senderID, packet)
-        sleep(5)
+        rednet.send(senderID, packet, PROTOCOL_DOCS)
         sd.clean()
-        break
     else
         sd.clean()
         term.setBackgroundColor(colors.blue)

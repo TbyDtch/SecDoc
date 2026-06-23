@@ -15,7 +15,7 @@ end
 while true do
     peripheral.find("modem", rednet.open)
     if rednet.isOpen() then
-        rednet.send(13,  docpage, PROTOCOL_DOCS)
+        rednet.send(13, docpage, PROTOCOL_DOCS)
         local senderID, packet = rednet.receive(PROTOCOL_DOCS)
         if senderID == 13 then
             UI(packet.name)
