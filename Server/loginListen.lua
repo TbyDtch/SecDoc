@@ -26,7 +26,7 @@ while true do
         if passID > 0 then -- If password is valid hardcoded password
             -- Create packet for doc server
             local databasePacket = {
-                ID = senderID,
+                pcID = senderID,
                 userID = passID
             }
             rednet.send(13, databasePacket, PROTOCOL_DOCS) -- speak to doc server and pass the ID for user

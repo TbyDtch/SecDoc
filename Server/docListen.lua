@@ -21,13 +21,15 @@ while true do
         local senderID, loginPacket  = rednet.receive(PROTOCOL_DOCS)
         -- check to see if we've receive a valid user info handoff and wait for client
         if senderID == 10 then
+            serverHits = serverHits + 1
             -- Take data from password packet
-            local pcID = loginPacket.ID
-            local userID = loginPacket.passID
+            local pcID = loginPacket.pcID
+            local userID = loginPacket.userID
 
             while true do
-                local senderID  = rednet.receive(PROTOCOL_DOCS)
+                senderID  = rednet.receive(PROTOCOL_DOCS)
                 if senderID == pcID then
+                    clientHits = clientHits + 1
                     rednet.send(senderID,sdd.names[userID])
                     break
                 end
