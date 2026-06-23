@@ -29,8 +29,10 @@ while true do
         if senderID == 10 and packet.message == "VALID" then
             sd.clean()
             sd.centerText("VALID PASSWORD")
-            sd.centerText("\n\n\nWelcome, " .. packet.name)
+            print("\n\n\n")
+            sd.centerText("Welcome, " .. packet.name)
             sleep(5)
+            sd.clean()
             break
         end
 
