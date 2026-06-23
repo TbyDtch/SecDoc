@@ -12,3 +12,10 @@ function UI()
     term.setBackgroundColor(colors.cyan)
     write()
 end
+
+-- Program start
+UI()
+local password = read("*")
+sleep(5)
+term.clear()
+term.setCursorPos(1,1)
