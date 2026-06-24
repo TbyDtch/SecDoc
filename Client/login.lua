@@ -3,6 +3,9 @@ local sd = require("SecDocLib")
 sd.terminateBlock(true)
 sd.clean(true)
 
+-- Protocols
+local protoLogin = sd.PROTOCOL_LOGIN
+
 -- Easy UI Setup / Reset
 local function UI()
     sd.centerText("Enter Password:")
@@ -23,8 +26,8 @@ while true do
 
         -- Send password
         if rednet.isOpen() then
-            rednet.send(10, password, sd.PROTOCOL_LOGIN)
-            local senderID, packet = rednet.receive(sd.PROTOCOL_LOGIN)
+            rednet.send(10, password, protoLogin)
+            local senderID, packet = rednet.receive(protoLogin, 2)
             if senderID == 10 and packet.message == "VALID" then
                 sd.clean(true)
                 sd.header("VALID PASSWORD")
@@ -36,7 +39,8 @@ while true do
                 term.setBackgroundColor(colors.blue)
                 sd.clean(false)
                 sd.header("ERROR")
-                sd.centerText("SERVER: " .. packet.info)
+                local errorMsg = (packet and packet.info) or "TIMED OUT / INVALID RESPONSE"
+                sd.centerText("SERVER: " .. errorMsg)
                 sleep(5)
                 sd.clean(true)
             end

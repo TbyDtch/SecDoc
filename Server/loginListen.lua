@@ -6,6 +6,10 @@ local sdd = require("SecDocServerData")
 local loginCount = 0
 local validCount = 0
 
+-- Protocol
+local protoDocs = sd.PROTOCOL_DOCS
+local protoLogin = sd.PROTOCOL_LOGIN
+
 -- Start
 while true do
     sd.clean(true)
@@ -18,32 +22,34 @@ while true do
         sd.centerText("Login Count:".. loginCount)
         sd.centerText("Valid Count:".. validCount)
         -- waiting for login packets
-        local senderID, password = rednet.receive(sd.PROTOCOL_LOGIN)
-        loginCount = loginCount + 1
-        local passID = sd.findStringInList(sdd.passwords, password)
-        if passID then -- Safely checks that passID isn't nil
-            -- Create packet for doc server
-            local databasePacket = {
-                pcID = senderID,
-                user = sdd.names[passID]
-            }
-            rednet.send(13, databasePacket, sd.PROTOCOL_DOCS) -- speak to doc server and pass the ID for user
-            -- Create packet for client and send
-            local clientPacket = {
-                message = "VALID",
-                info = sdd.names[passID]
-            }
-            rednet.send(senderID, clientPacket, sd.PROTOCOL_LOGIN) -- send to client
-            validCount = validCount + 1
+        local senderID, password = rednet.receive(protoDocs, 2)
+        if senderID then
+            loginCount = loginCount + 1
+            local passID = sd.findStringInList(sdd.passwords, password)
+            if passID then -- Safely checks that passID isn't nil
+                -- Create packet for doc server
+                local databasePacket = {
+                    pcID = senderID,
+                    user = sdd.names[passID]
+                }
+                rednet.send(13, databasePacket, protoDocs) -- speak to doc server and pass the ID for user
+                -- Create packet for client and send
+                local clientPacket = {
+                    message = "VALID",
+                    info = sdd.names[passID]
+                }
+                rednet.send(senderID, clientPacket, protoDocs) -- send to client
+                validCount = validCount + 1
+            else
+                local failPacket = {
+                    message = "INVALID",
+                    info = "INVALID LOGIN"
+                }
+                rednet.send(senderID, failPacket, protoDocs)
+            end
         else
-            local failPacket = {
-                message = "INVALID",
-                info = "INVALID LOGIN"
-            }
-            rednet.send(senderID, failPacket, sd.PROTOCOL_LOGIN)
+            sd.errorScreen("SecDoc Login Server", "NO MODEM FOUND", 10)
         end
-    else
-        sd.errorScreen("SecDoc Login Server", "NO MODEM FOUND", 10)
     end
 end
 

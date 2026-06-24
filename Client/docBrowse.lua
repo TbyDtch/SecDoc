@@ -2,15 +2,15 @@
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
 
--- Use the correct protocol fallback from the library
-local PROTOCOL = sd.SecDocsPacket or "SecDocsPacket"
-
 -- Store network data
 local user = "Loading..."
 local senderID
 local listsPacket
 local fileListItems = {}
 local fileListEnts = {}
+
+-- Protocol
+local PROTOCOL = sd.PROTOCOL_DOCS
 
 -- Movement for arrows
 local position = 4
@@ -44,8 +44,8 @@ if rednet.isOpen() then
             UI(user, false, position)
             senderID, listsPacket = rednet.receive(PROTOCOL)
             -- Fixed to match server table keys ("items" and "ents")
-            fileListItems = listsPacket.items or {}
-            fileListEnts = listsPacket.ents or {}
+            fileListItems = listsPacket.items
+            fileListEnts = listsPacket.ents
             break
         end
         sleep(0.5) -- Wait before retrying request

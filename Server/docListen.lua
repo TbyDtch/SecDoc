@@ -1,6 +1,9 @@
 -- Config / Setup
 local sd = require("SecDocLib")
 
+-- Protocols
+local protoDocs = sd.PROTOCOL_DOCS
+
 -- Log interactions for debugging and visual pleasure
 local clientHits = 0
 local serverHits = 0
@@ -28,7 +31,7 @@ while true do
         -- Setup UI
         UI()
         -- Pickup ID from password server and send data to next client
-        local senderID, message  = rednet.receive(sd.PROTOCOL_DOCS)
+        local senderID, message  = rednet.receive(protoDocs)
         -- check to see if we've receive a valid user info handoff and wait for client
         if senderID == 10 then
             serverHits = serverHits + 1
@@ -38,12 +41,12 @@ while true do
             local user = message.user
 
             while true do
-                local senderID, message  = rednet.receive(sd.PROTOCOL_DOCS)
+                local senderID, message  = rednet.receive(protoDocs)
                 if senderID == pcID and message == "REQUEST" then
                     clientHits = clientHits + 1
                     UI()
-                    rednet.send(senderID, user, sd.PROTOCOL_DOCS)
-                    rednet.send(senderID, listsPacket, sd.PROTOCOL_DOCS)
+                    rednet.send(senderID, user, protoDocs)
+                    rednet.send(senderID, listsPacket, protoDocs)
                     break
                 end
             end

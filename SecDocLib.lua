@@ -2,7 +2,7 @@ local secdoc = {} -- Create the library table
 
 -- Protocols
 secdoc.PROTOCOL_LOGIN = "SecDocLoginPacket"
-secdoc.SecDocsPacket = "SecDocsPacket"
+secdoc.PROTOCOL_DOCS = "SecDocsPacket"
 
 -- Backup the original pullEvent function
 local nativePullEventRaw = os.pullEventRaw
