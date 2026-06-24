@@ -8,6 +8,7 @@ local protoLogin = sd.PROTOCOL_LOGIN
 
 -- Easy UI Setup / Reset
 local function UI()
+    sd.clean(true)
     sd.centerText("Enter Password:")
     term.setBackgroundColor(colors.cyan)
     sd.spam(" ")
@@ -35,10 +36,10 @@ while true do
                 sleep(2)
                 sd.clean(true)
                 break
+            elseif senderID then
+                sd.errorScreen("SecDoc Login Service", packet.message, 5)
             elseif not rednet.isOpen() then
                 sd.errorScreen("SecDoc Login Service","NO MODEM FOUND",5) -- Kinda bad
-            elseif senderID then
-                sd.errorScreen("SecDoc Login Service",packet.message,5)
             end
         else
             sd.errorScreen("SecDoc Login Service","NO MODEM FOUND",5) -- Kinda bad
