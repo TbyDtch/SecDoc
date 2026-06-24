@@ -74,7 +74,7 @@ function secdoc.clean(color)
     term.setCursorPos(1,1)
 end
 
---- ERROR Codes
+--- ERROR Codes (Auto cleans term)
 function secdoc.errorScreen(header, errortxt, time)
     term.setBackgroundColor(colors.blue)
     secdoc.clean(false)

@@ -4,32 +4,44 @@ local sd = require("SecDocLib")
 local clientHits = 0
 local serverHits = 0
 -- Array for files server has
-local fileList = sd.getFilesFromDir("docs/")
+local fileListItems = sd.getFilesFromDir("docs/items")
+local fileListEnts = sd.getFilesFromDir("docs/ents")
+
+local function UI()
+    sd.clean(true)
+    sd.header("SecDoc Database Server")
+    sd.centerText("Listening for packets...")
+    sd.centerText("Login Server Hits: " .. serverHits)
+    sd.centerText("Client Hits: " .. clientHits)
+end
 
 -- Start
 while true do
+    local listsPacket = {
+        items = fileListItems,
+        ents = fileListEnts
+    }
     peripheral.find("modem", rednet.open)
     if rednet.isOpen() then -- Check if rednet is open
         -- Setup UI
-        sd.clean(true)
-        sd.header("SecDoc Database Server")
-        sd.centerText("Listening for packets...")
-        sd.centerText("Login Server Hits: " .. serverHits)
-        sd.centerText("Client Hits: " .. clientHits)
+        UI()
         -- Pickup ID from password server and send data to next client
-        local senderID, loginPacket  = rednet.receive(PROTOCOL_DOCS)
+        local senderID, message  = rednet.receive(sd.PROTOCOL_DOCS)
         -- check to see if we've receive a valid user info handoff and wait for client
         if senderID == 10 then
             serverHits = serverHits + 1
+            UI()
             -- Take data from password packet
-            local pcID = loginPacket.pcID
-            local user = loginPacket.user
+            local pcID = message.pcID
+            local user = message.user
 
             while true do
-                local senderID, message  = rednet.receive(PROTOCOL_DOCS)
+                local senderID, message  = rednet.receive(sd.PROTOCOL_DOCS)
                 if senderID == pcID and message == "REQUEST" then
                     clientHits = clientHits + 1
-                    rednet.send(senderID, user, PROTOCOL_DOCS)
+                    UI()
+                    rednet.send(senderID, user, sd.PROTOCOL_DOCS)
+                    rednet.send(senderID, listsPacket, sd.PROTOCOL_DOCS)
                     break
                 end
             end

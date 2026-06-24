@@ -29,7 +29,7 @@ while true do
                 sd.clean(true)
                 sd.header("VALID PASSWORD")
                 sd.centerText("Welcome, " .. packet.info)
-                sleep(5)
+                sleep(2)
                 sd.clean(true)
                 break
             else
