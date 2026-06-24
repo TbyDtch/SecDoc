@@ -36,16 +36,12 @@ while true do
                 sd.clean(true)
                 break
             elseif not rednet.isOpen() then
-                term.setBackgroundColor(colors.blue)
-                sd.clean(false)
-                sd.header("ERROR")
-                local errorMsg = (packet and packet.info) or "TIMED OUT / INVALID RESPONSE"
-                sd.centerText("SERVER: " .. errorMsg)
-                sleep(5)
-                sd.clean(true)
+                sd.errorScreen("SecDoc Login Service","NO MODEM FOUND",5) -- Kinda bad
+            elseif senderID then
+                sd.errorScreen("SecDoc Login Service",packet.message,5)
             end
         else
-            sd.errorScreen("SecDoc Login Service","NO MODEM FOUND", 10)
+            sd.errorScreen("SecDoc Login Service","NO MODEM FOUND",5) -- Kinda bad
         end
 
     else -- Failed to find modem and reboot

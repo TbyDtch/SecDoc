@@ -3,7 +3,7 @@ local sd = require("SecDocLib")
 sd.terminateBlock(true)
 
 -- Store network data
-local user = "Loading..."
+local user = "Connecting..."
 local senderID
 local listsPacket
 local fileListItems = {}
@@ -23,19 +23,20 @@ local function UI(name, preLogin, pos)
         term.setCursorPos(1, pos)
         term.setBackgroundColor(colors.white)
         sd.spam(" ")
+        term.setBackgroundColor(colors.black)
         term.setCursorPos(1, 4)
         sd.centerText("Items/")
         sd.centerText("Ents/")
     end
 end
 
--- Draw initial loading screen so the user doesn't see a black box
+-- Draw loading screen so the user doesn't see a black
 UI(user, true, position)
 
 -- Connect and get data
 peripheral.find("modem", rednet.open)
 if rednet.isOpen() then
-    -- Try sending until the server replies (prevents packet dropping)
+    -- Try sending until the server replies
     while true do
         rednet.send(13, "REQUEST", PROTOCOL)
         senderID, user = rednet.receive(PROTOCOL, 2) -- 2 second timeout check

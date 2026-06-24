@@ -47,7 +47,7 @@ while true do
                 }
                 rednet.send(senderID, failPacket, protoDocs)
             end
-        elseif rednet.isOpen() then
+        elseif not rednet.isOpen() then
             sd.errorScreen("SecDoc Login Server", "NO MODEM FOUND", 10)
         end
     end
