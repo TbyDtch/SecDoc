@@ -35,7 +35,7 @@ while true do
                 sleep(2)
                 sd.clean(true)
                 break
-            else
+            elseif not rednet.isOpen() then
                 term.setBackgroundColor(colors.blue)
                 sd.clean(false)
                 sd.header("ERROR")

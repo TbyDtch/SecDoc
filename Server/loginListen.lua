@@ -22,7 +22,7 @@ while true do
         sd.centerText("Login Count:".. loginCount)
         sd.centerText("Valid Count:".. validCount)
         -- waiting for login packets
-        local senderID, password = rednet.receive(protoDocs, 2)
+        local senderID, password = rednet.receive(protoLogin, 2)
         if senderID then
             loginCount = loginCount + 1
             local passID = sd.findStringInList(sdd.passwords, password)
@@ -38,7 +38,7 @@ while true do
                     message = "VALID",
                     info = sdd.names[passID]
                 }
-                rednet.send(senderID, clientPacket, protoDocs) -- send to client
+                rednet.send(senderID, clientPacket, protoLogin) -- send to client
                 validCount = validCount + 1
             else
                 local failPacket = {
@@ -47,7 +47,7 @@ while true do
                 }
                 rednet.send(senderID, failPacket, protoDocs)
             end
-        else
+        elseif rednet.isOpen() then
             sd.errorScreen("SecDoc Login Server", "NO MODEM FOUND", 10)
         end
     end
