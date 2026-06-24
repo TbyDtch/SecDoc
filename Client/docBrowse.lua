@@ -1,16 +1,17 @@
 -- Config / Setup
 local sd = require("SecDocLib")
 sd.terminateBlock(true)
-sd.clean(true)
--- Store user
-local user
+
+-- Use the correct protocol fallback from the library
+local PROTOCOL = sd.SecDocsPacket or "SecDocsPacket"
+
+-- Store network data
+local user = "Loading..."
 local senderID
--- Keys for navigation
-local event, keyCode = os.pullEvent("key")
--- array for docs
 local listsPacket
-local fileListItems
-local fileListEnts
+local fileListItems = {}
+local fileListEnts = {}
+
 -- Movement for arrows
 local position = 4
 
@@ -19,41 +20,54 @@ local function UI(name, preLogin, pos)
     sd.clean(true)
     sd.header("SecDoc Browser Interface: " .. name)
     if not preLogin then
-        term.setCursorPos(1,pos)
+        term.setCursorPos(1, pos)
+        term.setBackgroundColor(colors.white)
         sd.spam(" ")
-        term.setCursorPos(1,4)
+        term.setCursorPos(1, 4)
         sd.centerText("Items/")
+        sd.centerText("Ents/")
     end
 end
 
--- Start
-while true do
-    peripheral.find("modem", rednet.open)
-    if rednet.isOpen() then
-        rednet.send(13, "REQUEST", sd.PROTOCOL_DOCS)
-        senderID, user = rednet.receive(sd.PROTOCOL_DOCS)
+-- Draw initial loading screen so the user doesn't see a black box
+UI(user, true, position)
+
+-- Connect and get data
+peripheral.find("modem", rednet.open)
+if rednet.isOpen() then
+    -- Try sending until the server replies (prevents packet dropping)
+    while true do
+        rednet.send(13, "REQUEST", PROTOCOL)
+        senderID, user = rednet.receive(PROTOCOL, 2) -- 2 second timeout check
+        
         if senderID == 13 then
-            UI(user, true, position)
-            senderID, listsPacket = rednet.receive(sd.PROTOCOL_DOCS)
-            fileListItems = listsPacket.fileListItems
-            fileListEnts = listsPacket.fileListEnts
+            UI(user, false, position)
+            senderID, listsPacket = rednet.receive(PROTOCOL)
+            -- Fixed to match server table keys ("items" and "ents")
+            fileListItems = listsPacket.items or {}
+            fileListEnts = listsPacket.ents or {}
             break
         end
-    else
-        sd.errorScreen("SecDoc Browser Interface: NULL", "NO MODEM FOUND", 10)
+        sleep(0.5) -- Wait before retrying request
     end
+else
+    sd.errorScreen("SecDoc Browser Interface: NULL", "NO MODEM FOUND", 10)
 end
 
+-- Main Event Loop (Merged UI updates and key tracking safely)
 while true do
+    UI(user, false, position)
+    
+    -- Pull the key event INSIDE the loop
+    local event, keyCode = os.pullEvent("key")
+    
     if keyCode == keys.up then
         if position > 4 then
             position = position - 1
-            UI(user, false, position)
         end
     elseif keyCode == keys.down then
         if position < 5 then
-            position = position - 1
-            UI(user, false, position)
+            position = position + 1 -- Fixed from minus to plus
         end
     end
 end
