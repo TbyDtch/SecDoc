@@ -1,8 +1,10 @@
 -- Config / Setup
 local sd = require("SecDocLib")
+
 -- Log interactions for debugging and visual pleasure
 local clientHits = 0
 local serverHits = 0
+
 -- Array for files server has
 local fileListItems = sd.getFilesFromDir("docs/items")
 local fileListEnts = sd.getFilesFromDir("docs/ents")

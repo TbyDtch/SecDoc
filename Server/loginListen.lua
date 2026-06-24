@@ -1,10 +1,10 @@
 -- Config / Setup
 local sd = require("SecDocLib")
 local sdd = require("SecDocServerData")
+
 -- Log interactions for debugging and visual pleasure
 local loginCount = 0
 local validCount = 0
--- Protocol for rednet
 
 -- Start
 while true do
