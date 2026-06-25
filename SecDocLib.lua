@@ -65,7 +65,7 @@ function secdoc.header(title)
 end
 
 --- Cleans console in one line
--- @param boolean color: clears color too
+-- @param boolean color: clear color too?
 function secdoc.clean(color)
     if(color) then
         term.setBackgroundColor(colors.black)
@@ -88,13 +88,14 @@ end
 function secdoc.findStringInList(targetList, searchString)
     for index, value in ipairs(targetList) do
         if value == searchString then
-            return index -- Found it! Return the position
+            return index -- Found it Return the position
         end
     end
     return nil -- Return nil if the string isn't in the list
 end
 
 -- Reusable function to get all files in a directory
+-- @param string directoryPath : The directory you'd like to target for index return
 function secdoc.getFilesFromDir(directoryPath)
     local fileArray = {}
     
