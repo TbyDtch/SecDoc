@@ -49,7 +49,6 @@ while true do
                 for i = 1, 3 do
                     local docsSenderID, reply = rednet.receive(protoDocs, 1)
                     if docsSenderID == 13 and reply then
-                        print("docs replied!")
                         docsOnline = reply
                         break
                     end
@@ -57,7 +56,6 @@ while true do
 
                 -- Create packet for client and check if docs online
                 if docsOnline then
-                    print("sending docs online to client")
                     local clientPacket = {
                         message = "VALID",
                         info = sdd.names[passID]
@@ -67,7 +65,6 @@ while true do
 
                 -- Docs is offline
                 else
-                    print("MAYBE WE DID A LITTLE MORE")
                     local clientPacket = {
                         message = "DOCS OFFLINE",
                         info = "DOCS OFFLINE"
