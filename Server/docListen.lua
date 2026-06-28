@@ -9,53 +9,93 @@ local clientHits = 0
 local serverHits = 0
 local invalidHits = 0
 
--- Array for files server has
-local fileListItems = sd.getFilesFromDir("docs/items")
-local fileListEnts = sd.getFilesFromDir("docs/ents")
+-- Track active authenticated sessions: [computerID] = username
+local activeSessions = {}
 
 local function UI()
     sd.clean(true)
     sd.header("SecDoc Database Server")
     sd.centerText("Listening for packets...")
     sd.centerText("Login Server Hits: " .. serverHits)
-    sd.centerText("Client Hits: " .. clientHits)
+    sd.centerText("Client Logins: " .. clientHits)
     sd.centerText("Invalid Hits: " .. invalidHits)
+end
+
+-- Helper to safely get lists
+local function getDirectoryLists()
+    return {
+        items = sd.getFilesFromDir("docs/items"),
+        ents = sd.getFilesFromDir("docs/ents")
+    }
 end
 
 -- Start
 while true do
-    local listsPacket = {
-        items = fileListItems,
-        ents = fileListEnts
-    }
     peripheral.find("modem", rednet.open)
-    if rednet.isOpen() then -- Check if rednet is open
-        -- Setup UI
+    if rednet.isOpen() then
         UI()
 
-        -- Pickup ID from password server and send data to next client
-        local senderID, message  = rednet.receive(protoDocs)
+        -- Listen globally for any incoming packet without timing out
+        local senderID, message = rednet.receive(protoDocs)
         
-        -- check to see if we've receive a valid user info handoff and wait for client
-        if senderID == 10 then
-            rednet.send(senderID, true, protoDocs)
-            serverHits = serverHits + 1
-            UI()
-            -- Take data from password packet
-            local pcID = message.pcID
-            local user = message.user
+        if senderID then
+            -- CASE 1: Auth server (ID 10) is broadcasting a new authenticated client session
+            if senderID == 10 and type(message) == "table" and message.pcID and message.user then
+                rednet.send(senderID, true, protoDocs)
+                activeSessions[message.pcID] = message.user -- Register session
+                serverHits = serverHits + 1
+                UI()
 
-            while true do
-                local senderID, message  = rednet.receive(protoDocs)
-                if senderID == pcID and message == "REQUEST" then
+            -- CASE 2: Message is coming from an actively registered client session
+            elseif activeSessions[senderID] then
+                local user = activeSessions[senderID]
+
+                if message == "REQUEST" then
                     clientHits = clientHits + 1
                     UI()
                     rednet.send(senderID, user, protoDocs)
-                    rednet.send(senderID, listsPacket, protoDocs)
-                    break
-                else
-                    invalidHits = invalidHits + 1
+                    rednet.send(senderID, getDirectoryLists(), protoDocs)
+                    
+                elseif message == "REFRESH" then
+                    rednet.send(senderID, getDirectoryLists(), protoDocs)
+
+                elseif type(message) == "table" and message[1] == "GET_DOC" then
+                    -- Sanitize path to lowercase to match Ubuntu file system storage structure
+                    local requestedPath = string.lower(message[2])
+                    local fileData = "Error: File not found or unreadable."
+                    local fullPath = "docs/" .. requestedPath
+                    
+                    if fs.exists(fullPath) and not fs.isDir(fullPath) then
+                        local file = fs.open(fullPath, "r")
+                        if file then
+                            fileData = file.readAll()
+                            file.close()
+                        end
+                    end
+                    rednet.send(senderID, fileData, protoDocs)
+                    UI()
+
+                elseif type(message) == "table" and message[1] == "SAVE_DOC" then
+                    -- Convert target prefix pathing to lowercase for safety
+                    local savePath = "docs/" .. string.lower(message[2])
+                    local content = message[3]
+                    
+                    local success = false
+                    local file = fs.open(savePath, "w")
+                    if file then
+                        file.write(content)
+                        file.close()
+                        success = true
+                    end
+                    
+                    rednet.send(senderID, { "SAVE_STATUS", success }, protoDocs)
+                    UI()
                 end
+
+            -- CASE 3: Packet received, but computer ID is unauthorized/not logged in
+            else
+                invalidHits = invalidHits + 1
+                UI()
             end
         end
     else
